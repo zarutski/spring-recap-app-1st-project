@@ -16,7 +16,7 @@ public class Book {
     @Size(min = 2, max = 100, message = "Name should be between 2 and 100 characters")
     private String author;
 
-    @Min(value = 0, message = "Year of publishing should be at least 0")
+    @Min(value = 1, message = "Year of publishing should be at least 1")
     private int publishYear;
 
     public Book() {

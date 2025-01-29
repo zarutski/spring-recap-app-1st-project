@@ -17,6 +17,9 @@ public class BookDAO {
     // queries
     private static final String SELECT_SCRIPT = "SELECT * FROM book";
     private static final String SELECT_BY_ID_SCRIPT = "SELECT * FROM book WHERE id=?";
+    private static final String INSERT_SCRIPT = "INSERT INTO book (title, author, publishYear) VALUES(?, ?, ?)";
+    private static final String UPDATE_SCRIPT = "UPDATE book SET title=?, author=?, publishYear=? WHERE id=?";
+    private static final String DELETE_SCRIPT = "DELETE FROM book WHERE id=?";
 
     @Autowired
     public BookDAO(JdbcTemplate jdbcTemplate) {
@@ -32,4 +35,17 @@ public class BookDAO {
         return jdbcTemplate.query(SELECT_BY_ID_SCRIPT, new BeanPropertyRowMapper<>(Book.class), new Object[]{id})
                 .stream().findAny();
     }
+
+    public void save(Book book) {
+        jdbcTemplate.update(INSERT_SCRIPT, book.getTitle(), book.getAuthor(), book.getPublishYear());
+    }
+
+    public void update(int id, Book book) {
+        jdbcTemplate.update(UPDATE_SCRIPT, book.getTitle(), book.getAuthor(), book.getPublishYear(), id);
+    }
+
+    public void delete(int id) {
+        jdbcTemplate.update(DELETE_SCRIPT, id);
+    }
+
 }
