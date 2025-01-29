@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show certain book</title>
+</head>
+<body>
+<h2>Book's info:</h2>
+<hr/>
+<p th:text="${book.getTitle()}+', '+${book.getAuthor()}+', '+${book.getPublishYear()}"/>
+<hr/>
+<a th:href="@{/books/{id}(id=${book.getId()})}+'/edit'" th:text="Edit">Edit no meaning (override by the th:text)</a>
+<br>
+<a th:href="@{/books/{id}/edit(id=${book.getId()})}">[edit - optional_coding]</a>
+<br>
+<br>
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}" th:object="${book}">
+    <div>
+        <input type="submit" value="Delete Book">
+    </div>
+</form>
+
+<br>
+<hr/>
+<br>
+<a href="/books">return to index</a>
+</body>
+</html>
