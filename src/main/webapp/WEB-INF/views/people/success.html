@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<h2>Person:</h2>
+<p th:text="${person.getId()}"/>
+<p th:text="${person.getName()}"/>
+<p th:text="${person.getYearOfBirth()}"/>
+<h2>created!</h2>
+<a href="/people">return to index</a>
+</body>
+</html>

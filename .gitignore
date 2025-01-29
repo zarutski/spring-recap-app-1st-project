@@ -1,0 +1,51 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+/.idea/.gitignore
+/.smarttomcat/spring-recap2-02/conf/catalina.properties
+/.smarttomcat/spring-recap2-02/conf/context.xml
+/.idea/encodings.xml
+/.smarttomcat/spring-recap2-02/conf/jaspic-providers.xml
+/.smarttomcat/spring-recap2-02/conf/jaspic-providers.xsd
+/.smarttomcat/spring-recap2-02/conf/logging.properties
+/.idea/misc.xml
+/.smarttomcat/spring-recap2-02/conf/server.xml
+/.smarttomcat/spring-recap2-02/conf/tomcat-users.xml
+/.smarttomcat/spring-recap2-02/conf/tomcat-users.xsd
+/.idea/vcs.xml
+/.smarttomcat/spring-recap2-02/conf/web.xml
