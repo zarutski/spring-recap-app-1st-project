@@ -1,6 +1,8 @@
 package com.recap.self.springcourse.config.controllers;
 
+import com.recap.self.springcourse.config.dao.BookDAO;
 import com.recap.self.springcourse.config.dao.PersonDAO;
+import com.recap.self.springcourse.config.models.Book;
 import com.recap.self.springcourse.config.models.Person;
 import com.recap.self.springcourse.config.util.PersonValidator;
 import jakarta.validation.Valid;
@@ -22,10 +24,12 @@ import java.util.List;
 public class PeopleController {
 
     private final PersonDAO personDAO;
+    private final BookDAO bookDAO;
     private final PersonValidator validator;
 
-    public PeopleController(PersonDAO personDAO, PersonValidator validator) {
+    public PeopleController(PersonDAO personDAO, BookDAO bookDAO, PersonValidator validator) {
         this.personDAO = personDAO;
+        this.bookDAO = bookDAO;
         this.validator = validator;
     }
 
@@ -41,7 +45,9 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         Person person = personDAO.show(id);
+        List<Book> books = bookDAO.getBooksByPerson(id);
         model.addAttribute("person", person);
+        model.addAttribute("books", books);
         return "people/show";
     }
 

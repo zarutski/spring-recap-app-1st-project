@@ -17,9 +17,10 @@ public class BookDAO {
     // queries
     private static final String SELECT_SCRIPT = "SELECT * FROM book";
     private static final String SELECT_BY_ID_SCRIPT = "SELECT * FROM book WHERE id=?";
-    private static final String INSERT_SCRIPT = "INSERT INTO book (title, author, publishYear) VALUES(?, ?, ?)";
-    private static final String UPDATE_SCRIPT = "UPDATE book SET title=?, author=?, publishYear=? WHERE id=?";
+    private static final String INSERT_SCRIPT = "INSERT INTO book (title, author, publish_year) VALUES(?, ?, ?)";
+    private static final String UPDATE_SCRIPT = "UPDATE book SET title=?, author=?, publish_year=? WHERE id=?";
     private static final String DELETE_SCRIPT = "DELETE FROM book WHERE id=?";
+    private static final String SELECT_BY_PERSON_ID = "SELECT * FROM book WHERE user_id=?";
 
     @Autowired
     public BookDAO(JdbcTemplate jdbcTemplate) {
@@ -30,7 +31,6 @@ public class BookDAO {
         return jdbcTemplate.query(SELECT_SCRIPT, new BeanPropertyRowMapper<>(Book.class));
     }
 
-    // TODO: refactor PersonDao by deprecated methods replacement
     public Optional<Book> getBookById(int id) {
         return jdbcTemplate.query(SELECT_BY_ID_SCRIPT, new BeanPropertyRowMapper<>(Book.class), new Object[]{id})
                 .stream().findAny();
@@ -46,6 +46,10 @@ public class BookDAO {
 
     public void delete(int id) {
         jdbcTemplate.update(DELETE_SCRIPT, id);
+    }
+
+    public List<Book> getBooksByPerson(int id) {
+        return jdbcTemplate.query(SELECT_BY_PERSON_ID, new BeanPropertyRowMapper<>(Book.class), id);
     }
 
 }

@@ -8,21 +8,35 @@
 <h2>Person's info:</h2>
 <hr/>
 <p th:text="${person.getName()}+', '+${person.getYearOfBirth()}"/>
+
+<div th:if="${books==null or books.empty}">
+    <p>Человек пока не взял ни одной книги</p>
+</div>
+
+<div th:if="${books!=null and !books.empty}">
+    <hr/>
+    <b>Books:</b>
+    <br/>
+    <table th:each="book : ${books}">
+        <tr th:text="${book.getTitle()}+', '+${book.getAuthor()}+', '+${book.getPublishYear()}">book</tr>
+    </table>
+</div>
 <hr/>
-<a th:href="@{/people/{id}(id=${person.getId()})}+'/edit'" th:text="Edit">Edit no meaning (override by the th:text)</a>
-<br>
-<a th:href="@{/people/{id}/edit(id=${person.getId()})}">[edit - optional_coding]</a>
-<br>
-<br>
+
+<form th:method="GET" th:action="@{/people/{id}(id=${person.getId()})}+'/edit'" th:object="${person}">
+    <div>
+        <input type="submit" value="Edit Person">
+    </div>
+</form>
+<br/>
+
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
     <div>
         <input type="submit" value="Delete Person">
     </div>
 </form>
 
-<br>
 <hr/>
-<br>
 <a href="/people">return to index</a>
 </body>
 </html>

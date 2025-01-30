@@ -9,18 +9,20 @@
 <hr/>
 <p th:text="${book.getTitle()}+', '+${book.getAuthor()}+', '+${book.getPublishYear()}"/>
 <hr/>
-<a th:href="@{/books/{id}(id=${book.getId()})}+'/edit'" th:text="Edit">Edit no meaning (override by the th:text)</a>
+
+<form th:method="GET" th:action="@{/books/{id}(id=${book.getId()})}+'/edit'" th:object="${book}">
+    <div>
+        <input type="submit" value="Edit Book">
+    </div>
+</form>
 <br>
-<a th:href="@{/books/{id}/edit(id=${book.getId()})}">[edit - optional_coding]</a>
-<br>
-<br>
+
 <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}" th:object="${book}">
     <div>
         <input type="submit" value="Delete Book">
     </div>
 </form>
 
-<br>
 <hr/>
 <br>
 <a href="/books">return to index</a>
