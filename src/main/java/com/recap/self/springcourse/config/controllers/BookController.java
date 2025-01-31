@@ -1,26 +1,36 @@
 package com.recap.self.springcourse.config.controllers;
 
 import com.recap.self.springcourse.config.dao.BookDAO;
+import com.recap.self.springcourse.config.dao.PersonDAO;
 import com.recap.self.springcourse.config.models.Book;
+import com.recap.self.springcourse.config.models.Person;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
 public class BookController {
 
-
     private final BookDAO bookDAO;
+    private final PersonDAO personDAO;
 
     @Autowired
-    public BookController(BookDAO bookDAO) {
+    public BookController(BookDAO bookDAO, PersonDAO personDAO) {
         this.bookDAO = bookDAO;
+        this.personDAO = personDAO;
     }
 
     @GetMapping
@@ -31,8 +41,9 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public String getBook(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
         Book book = bookDAO.getBookById(id).orElse(null);
+        populateOwnerAttribute(model, id);
         model.addAttribute("book", book);
         return "books/show";
     }
@@ -71,5 +82,26 @@ public class BookController {
     public String deleteBook(@PathVariable("id") int id) {
         bookDAO.delete(id);
         return "redirect:/books";
+    }
+
+    @PatchMapping("{id}/release")
+    public String releaseBook(@PathVariable("id") int id) {
+        bookDAO.release(id);
+        return "redirect:/books/" + id;
+    }
+
+    @PatchMapping("{id}/assign")
+    public String assignBook(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
+        bookDAO.assignToPerson(id, person.getId());
+        return "redirect:/books/" + id;
+    }
+
+    private void populateOwnerAttribute(Model model, int id) {
+        Optional<Person> personByBookId = personDAO.getPersonByBookId(id);
+        if (personByBookId.isPresent()) {
+            model.addAttribute("user", personByBookId.get());
+        } else {
+            model.addAttribute("people", personDAO.index());
+        }
     }
 }

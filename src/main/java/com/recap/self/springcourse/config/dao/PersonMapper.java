@@ -6,12 +6,6 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-// --- ----------------------------------------------------------------------------------
-// --- mapping of the SQL query results (just for example, how it can work)
-// --- ----------------------------------------------------------------------------------
-// --- actually, there's no need to implement own mapper, because BeanPropertyRowMapper
-// --- is the base implementation for JavaBean property mapping
-// --- ----------------------------------------------------------------------------------
 public class PersonMapper implements RowMapper<Person> {
 
     @Override

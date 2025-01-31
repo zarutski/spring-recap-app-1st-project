@@ -14,13 +14,14 @@ public class BookDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
-    // queries
     private static final String SELECT_SCRIPT = "SELECT * FROM book";
     private static final String SELECT_BY_ID_SCRIPT = "SELECT * FROM book WHERE id=?";
+    private static final String SELECT_BY_PERSON_ID = "SELECT * FROM book WHERE user_id=?";
     private static final String INSERT_SCRIPT = "INSERT INTO book (title, author, publish_year) VALUES(?, ?, ?)";
     private static final String UPDATE_SCRIPT = "UPDATE book SET title=?, author=?, publish_year=? WHERE id=?";
     private static final String DELETE_SCRIPT = "DELETE FROM book WHERE id=?";
-    private static final String SELECT_BY_PERSON_ID = "SELECT * FROM book WHERE user_id=?";
+    private static final String RELEASE_BOOK_SCRIPT = "UPDATE book SET user_id=NULL WHERE id=?";
+    private static final String ASSIGN_TO_PERSON_SCRIPT = "UPDATE book SET user_id=? WHERE id=?";
 
     @Autowired
     public BookDAO(JdbcTemplate jdbcTemplate) {
@@ -52,4 +53,11 @@ public class BookDAO {
         return jdbcTemplate.query(SELECT_BY_PERSON_ID, new BeanPropertyRowMapper<>(Book.class), id);
     }
 
+    public void release(int id) {
+        jdbcTemplate.update(RELEASE_BOOK_SCRIPT, id);
+    }
+
+    public void assignToPerson(int id, int personId) {
+        jdbcTemplate.update(ASSIGN_TO_PERSON_SCRIPT, personId, id);
+    }
 }

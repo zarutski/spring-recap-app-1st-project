@@ -8,6 +8,27 @@
 <h2>Book's info:</h2>
 <hr/>
 <p th:text="${book.getTitle()}+', '+${book.getAuthor()}+', '+${book.getPublishYear()}"/>
+
+<div th:if="${user!=null}">
+    <p th:text="'Сейчас книга у пользователя: '+ ${user.getName()}"/>
+    <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}" th:object="${book}">
+        <div>
+            <input type="submit" value="Release Book">
+        </div>
+    </form>
+</div>
+
+<div th:if="${people!=null}">
+    <span>Book is available</span>
+    <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}" th:object="${book}">
+        <label for="person">Choose person:</label>
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option th:each="person: ${people}" th:value="${person.getId()}" th:text="${person.getName()}"></option>
+        </select>
+
+        <input type="submit" value="Assign to person">
+    </form>
+</div>
 <hr/>
 
 <form th:method="GET" th:action="@{/books/{id}(id=${book.getId()})}+'/edit'" th:object="${book}">
@@ -22,6 +43,7 @@
         <input type="submit" value="Delete Book">
     </div>
 </form>
+
 
 <hr/>
 <br>
