@@ -44,11 +44,13 @@ public class BookController {
         return "books/index";
     }
 
-    private List<Book> findBooks(Integer page, Integer booksPerPage, boolean sortByYear) {
-        if (page == null || booksPerPage == null) {
-            return bookService.findAll(sortByYear);
-        }
-        return bookService.findAll(page, booksPerPage, sortByYear);
+    @GetMapping("/search")
+    public String searchPage(@RequestParam(value = "q", required = false) String query,
+                             Model model) {
+        List<Book> books = bookService.findByTitle(query);
+        model.addAttribute("books", books);
+        model.addAttribute("query", query);
+        return "books/search";
     }
 
     @GetMapping("/{id}")
@@ -114,5 +116,12 @@ public class BookController {
         } else {
             model.addAttribute("people", personService.findAll());
         }
+    }
+
+    private List<Book> findBooks(Integer page, Integer booksPerPage, boolean sortByYear) {
+        if (page == null || booksPerPage == null) {
+            return bookService.findAll(sortByYear);
+        }
+        return bookService.findAll(page, booksPerPage, sortByYear);
     }
 }

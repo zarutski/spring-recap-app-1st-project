@@ -5,14 +5,21 @@
     <title>Show books</title>
 </head>
 <body>
+
 <h2>Books:</h2>
+<hr/>
+
 <div th:each="book : ${books}">
     <a th:href="@{/books/{id}(id=${book.getId()})}"
        th:text="${book.getTitle()}+', '+${book.getAuthor()}+', '+${book.getPublishYear()}">book</a>
 </div>
-<br/>
 <hr/>
-<br/>
+
 <a href="/books/new">create new book</a>
+<hr/>
+
+<a href="/books/search">book search</a>
+<hr/>
+
 </body>
 </html>
