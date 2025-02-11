@@ -1,11 +1,13 @@
 package com.recap.self.springcourse.config.controllers;
 
-import com.recap.self.springcourse.config.dao.BookDAO;
-import com.recap.self.springcourse.config.dao.PersonDAO;
 import com.recap.self.springcourse.config.models.Book;
 import com.recap.self.springcourse.config.models.Person;
+import com.recap.self.springcourse.config.service.BookService;
+import com.recap.self.springcourse.config.service.PersonService;
 import com.recap.self.springcourse.config.util.PersonValidator;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,19 +25,20 @@ import java.util.List;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private final PersonDAO personDAO;
-    private final BookDAO bookDAO;
+    private final BookService bookService;
+    private final PersonService personService;
     private final PersonValidator validator;
 
-    public PeopleController(PersonDAO personDAO, BookDAO bookDAO, PersonValidator validator) {
-        this.personDAO = personDAO;
-        this.bookDAO = bookDAO;
+    @Autowired
+    public PeopleController(BookService bookService, PersonService personService, PersonValidator validator) {
+        this.bookService = bookService;
+        this.personService = personService;
         this.validator = validator;
     }
 
     @GetMapping
     public String index(Model model) {
-        List<Person> index = personDAO.index();
+        List<Person> index = personService.findAll();
         model.addAttribute("people", index);
         return "people/index";
     }
@@ -43,8 +46,8 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        Person person = personDAO.show(id);
-        List<Book> books = bookDAO.getBooksByPerson(id);
+        Person person = personService.findById(id).orElseThrow(EntityNotFoundException::new);
+        List<Book> books = bookService.findByPersonId(id);
         model.addAttribute("person", person);
         model.addAttribute("books", books);
         return "people/show";
@@ -63,13 +66,13 @@ public class PeopleController {
             System.out.println("Logging, validation errors occurred while person creation ...");
             return "people/new";
         }
-        personDAO.save(person);
+        personService.save(person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
     public String update(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDAO.show(id));
+        model.addAttribute("person", personService.findById(id).orElseThrow(EntityNotFoundException::new));
         return "people/edit";
     }
 
@@ -79,13 +82,13 @@ public class PeopleController {
             System.out.println("Logging, validation errors occurred while person update ...");
             return "people/edit";
         }
-        personDAO.update(id, person);
+        personService.update(id, person);
         return "redirect:/people/{id}";
     }
 
     @DeleteMapping("/{id}")
     private String delete(@PathVariable("id") int id) {
-        personDAO.delete(id);
+        personService.delete(id);
         return "redirect:/people";
     }
 
