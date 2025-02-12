@@ -18,7 +18,16 @@
     <b>Books:</b>
     <br/>
     <table th:each="book : ${books}">
-        <tr th:text="${book.getTitle()}+', '+${book.getAuthor()}+', '+${book.getPublishYear()}">book</tr>
+        <tr th:if="${!book.isExpired()}">
+            <td th:text="${book.getTitle()}">Book Title</td>
+            <td th:text="${book.getAuthor()}">Author</td>
+            <td th:text="${book.getPublishYear()}">Publish Year</td>
+        </tr>
+        <tr th:if="${book.isExpired()}">
+            <td style="color:red" th:text="${book.getTitle()}">Book Title</td>
+            <td style="color:red" th:text="${book.getAuthor()}">Author</td>
+            <td style="color:red" th:text="${book.getPublishYear()}">Publish Year</td>
+        </tr>
     </table>
 </div>
 <hr/>
