@@ -5,8 +5,10 @@
     <title>Show certain person</title>
 </head>
 <body>
+
 <h2>Person's info:</h2>
 <hr/>
+
 <p th:text="${person.getName()}+', '+${person.getYearOfBirth()}"/>
 
 <div th:if="${books==null or books.empty}">
@@ -44,8 +46,9 @@
         <input type="submit" value="Delete Person">
     </div>
 </form>
-
 <hr/>
+
 <a href="/people">return to index</a>
+
 </body>
 </html>
